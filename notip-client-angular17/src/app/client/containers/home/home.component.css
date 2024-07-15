@@ -1,0 +1,195 @@
+.wrapper {
+  display: flex;
+}
+
+.sidebar {
+  width: 60px;
+  height: 100vh;
+  background-color: #424242;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--bs-dark);
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.tab-icon {
+  height: 60px;
+  width: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.tab-icon:hover {
+  background-color: #3d3232;
+}
+
+.tab-icon.active-tab {
+  background-color: #564444;
+}
+
+.body-vchat {
+  display: flex;
+  width: 100%;
+}
+
+.body-vchat .body-vchat-left {
+  background: #f7f9fb;
+  width: 320px;
+  border-right: 1px solid #dadce0;
+  height: 100vh;
+  overflow-y: scroll;
+  position: fixed;
+  left: 0;
+  top: 0;
+  margin-left: 60px;
+}
+
+.body-vchat .body-vchat-right {
+  width: calc(100% - 320px);
+  margin-left: 380px;
+}
+
+.body-vchat-left-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #dadce0;
+  padding: 6px 10px 6px 15px;
+}
+
+.box-fullname {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box-fullname span {
+  font-weight: 650;
+}
+
+.box-add-user-group {
+  padding: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.tab-header {
+  border: 1px solid #dadce0;
+  padding: 6px 10px 6px 15px;
+}
+
+.tab-header-search {
+  position: relative;
+  width: 90%;
+  height: 34px;
+}
+
+.tab-header-search-input{
+  width: 100%;
+  height: 100%;
+  font-size: 0.8rem;
+  border: 1px solid #cccccc;
+  background-color: #e7e7e7;
+}
+
+.tab-header-search-input:focus {
+  background-color: #fff;
+}
+
+.tab-header-search-btn {
+  outline: none;
+  width: 36px;
+  border: none;
+  background: transparent;
+  border-left: 1px solid #cccccc;
+  position: absolute;
+  color: var(--gray);
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.contacts {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-right: 5px;
+}
+
+.contacts .contacts-name {
+  font-size: 14px;
+  margin-left: 7px;
+}
+
+.contacts .contacts-control .contacts-control-add {
+  color: white;
+  width: 33px;
+  height: 33px;
+  line-height: 34px;
+  background: #30b518;
+  text-align: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.contacts .contacts-control .contacts-control-add:hover {
+  background: #1f960a;
+}
+
+.contacts .contacts-control .contacts-control-sendmess {
+  color: white;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  background: #385660;
+  transition: 0.3s ease-in-out;
+  text-align: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.contacts .contacts-control .contacts-control-sendmess:hover {
+  background: #50a6c3;
+}
+
+.box-member-in-group {
+  position: relative;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 0 12px 0 4px;
+  background-color: #b9dcff;
+}
+
+.box-member-in-group .remove-member {
+  position: absolute;
+  right: 0;
+  top: 0;
+  cursor: pointer;
+  font-size: 0.5rem;
+}
+  
+.box-group-skeleton{
+  display: flex;
+    padding: 10px 5px 10px 15px;
+    cursor: pointer;
+    overflow: hidden;
+    height: 60px;
+}
+
+.profile-img{
+  width: 100%;
+  max-height: 265px;
+  object-fit: cover;
+}

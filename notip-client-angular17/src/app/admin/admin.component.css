@@ -1,0 +1,16 @@
+@import url("../../assets/admin/vendors/simple-line-icons/css/simple-line-icons.css");
+@import url("../../assets/admin/vendors/css/vendor.bundle.base.css");
+@import url("../../assets/admin/vendors/daterangepicker/daterangepicker.css");
+@import url("../../assets/admin/vendors/chartist/chartist.min.css");
+@import url("../../assets/admin/css/style.css");
+
+.btn-option{
+  border: none;
+  outline: none;
+  background-color: transparent;
+  /*color: #b02a37;*/
+}
+
+.main-panel{
+  width: 90%;
+}

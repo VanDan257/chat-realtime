@@ -1,0 +1,103 @@
+<div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        
+        <div class="col-md-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body performane-indicator-card">
+                    <div class="d-sm-flex">
+                      <h4 class="card-title flex-shrink-1">Thống kê tin nhắn</h4>
+                      </div>
+                      <div id="performance-indicator-chart" class="ct-chart mt-4">
+                      @if(showButtonBack){
+                        <p class="text-back" (click)="getTrafficStatistics({statisticByYear: currentTime.getFullYear(), statisticByMonth: 0})">
+                          Quay lại thống kê năm
+                        </p>
+                      }
+                      <ngx-charts-line-chart
+                        [view]="view"
+                        [legend]="legend"
+                        [showXAxisLabel]="showXAxisLabel"
+                        [showYAxisLabel]="showYAxisLabel"
+                        [xAxis]="xAxis"
+                        [yAxis]="yAxis"
+                        [xAxisLabel]="xAxisLabel"
+                        [yAxisLabel]="yAxisLabel"
+                        [timeline]="timeline"
+                        [results]="statistics"
+                        (select)="onSelect($event)"
+                        >
+                      </ngx-charts-line-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Lượng khách hàng đăng ký so với tháng trước</h4>
+              <div class="aligner-wrapper">
+                <div class="d-flex justify-content-center absolute-center" style="margin-top: 2rem; font-size: 2rem;">
+                    @if(rateOfNewUser?.includes('-')){
+                      
+                      <div class="text-danger">
+                        {{rateOfNewUser}}%
+                        <span nz-icon nzType="arrow-down" nzTheme="outline"></span>
+                      </div>
+                    }
+                    @else{
+                      <div class="text-success">
+                        {{rateOfNewUser}}%
+                        <span nz-icon nzType="arrow-up" nzTheme="outline"></span>
+                      </div>
+                    }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-sm-flex align-items-center mb-4">
+            <h4 class="card-title mb-sm-0">Khách hàng thường xuyên sử dụng</h4>
+            <a routerLink="/admin/khach-hang/quan-ly-khach-hang" class="text-dark ml-auto mb-3 mb-sm-0">Xem tất cả khách hàng</a>
+          </div>
+          <div class="table-responsive border rounded p-1">
+            <table class="table table-bordered table-striped table-hover">
+              <thead class="table-dark">
+              <tr>
+                <th></th>
+                <th>Họ và tên</th>
+                <th>Số điện thoại</th>
+                <th>Email</th>
+                <th>Lần đăng nhập cuối</th>
+                <th>Số tin đã nhắn</th>
+                <th>Ngày đăng kí</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let client of clients">
+                  <td><img src="{{ client.User.Avatar | pipeHostFile }}" alt="" /></td>
+                  <td>{{client.User.UserName}}</td>
+                  <td>{{client.User.PhoneNumber}}</td>
+                  <td>{{client.User.Email}}</td>
+                  <td>{{client.User.LastLogin}}</td>
+                  <td>{{client.MessageCount}}</td>
+                  <td>{{client.User.Created | date:'short'}}</td>
+                  <td>
+                    <button title="Xem chi tiết" class="btn-option link-info"><i class="fa fa-solid fa-eye"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+</div>

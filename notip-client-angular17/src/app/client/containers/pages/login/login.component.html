@@ -1,0 +1,118 @@
+<div class="login-signup">
+  <div container class="container">
+    <div class="forms-container">
+      <div class="signin-signup">
+        <form [formGroup]="formData" class="sign-in-form">
+          <h2 class="title">Đăng nhập Notip</h2>
+          @if(messageErrorLogin != ""){
+            <div style="color: var(--bs-form-invalid-color); font-size: 0.7rem;">{{messageErrorLogin}}</div>
+          }
+          <div class="input-field">
+            <i class="fas fa-user"></i>
+            <input
+              type="text"
+              formControlName="email"
+              placeholder="Tên đăng nhập"
+            />
+            @if (submitted && formData.get('email')?.invalid &&
+            formData.get('email')?.hasError('required')) {
+            <span class="error"><small id="email-help" class="p-error">Vui lòng nhập email.</small></span>
+            }
+            @else if(submitted && formData.get('email')?.hasError('email')){
+              <div class="invalid-feedback">
+                  Hãy nhập đúng định dạng email
+              </div>
+          }
+          </div>
+          <div class="input-field">
+            <i class="fas fa-lock"></i>
+            <input
+              type="password"
+              formControlName="password"
+              placeholder="Mật khẩu"
+              required
+            />
+            @if (submitted && formData.get('password')?.invalid &&
+            formData.get('password')?.hasError('required')) {
+            <span class="error"><small id="password-help" class="p-error">Vui lòng nhập mật khẩu.</small></span>
+            }
+          </div>
+          <input type="submit" value="Đăng nhập" (click)="onSubmitLogin()" class="btn solid" />
+          <div class="w-75">
+            <a [routerLink]="['/quen-mat-khau']" style="margin-left: 40px;" id="forget-password">Quên mật khẩu?</a>
+          </div>
+        </form>
+        <form [formGroup]="formDataSignup" class="sign-up-form">
+          <h2 class="title">Đăng ký</h2>
+          @if(messageErrorSignup != ""){
+            <div style="color: var(--bs-form-invalid-color); font-size: 0.7rem;">{{messageErrorSignup}}</div>
+          }
+          <div class="input-field">
+            <i class="fas fa-user"></i>
+            <input
+              type="text"
+              formControlName="userName"
+              placeholder="Tên người dùng"
+            />
+            @if (submittedSiginup && formDataSignup.get('userName')?.invalid &&
+            formDataSignup.get('userName')?.hasError('required')){
+            <span class="error"> <small id="userName-help" class="p-error">Vui lòng nhập tên người dùng.</small></span>
+            }
+          </div>
+          <div class="input-field">
+            <i class="fas fa-envelope"></i>
+            <input type="email" formControlName="email" placeholder="Email" />
+            @if (submittedSiginup && formDataSignup.get('email')?.invalid &&
+              formDataSignup.get('email')?.hasError('required')){
+              <span class="error"><small id="email-help" class="p-error">Vui lòng nhập tên email.</small></span>
+            }
+          </div>
+          <div class="input-field">
+            <i class="fa fa-phone"></i>
+            <input
+              type="text"
+              formControlName="phone"
+              placeholder="Số điện thoại"
+            />
+          </div>
+          <div class="input-field">
+            <i class="fas fa-lock"></i>
+            <input
+              type="password"
+              formControlName="password"
+              placeholder="Mật khẩu"
+            />
+            @if (submittedSiginup && formDataSignup.get('password')?.invalid &&
+              formDataSignup.get('password')?.hasError('required')){
+              <span class="error"><small id="password-help" class="p-error">Vui lòng nhập mật khẩu.</small></span>
+            }
+          </div>
+          <input type="submit" (click)="onSubmitSignup()" class="btn" value="Đăng ký" />
+        </form>
+      </div>
+    </div>
+
+    <div class="panels-container">
+      <div class="panel left-panel">
+        <div class="content">
+          <h3>Notip</h3>
+          <p>Notip là một ứng dụng nhắn tin trực tuyến</p>
+          <button signUpBtn class="btn transparent btn-login" id="sign-up-btn">
+            Đăng ký
+          </button>
+        </div>
+        <img src="../../../assets/images/pn-chat.svg" class="image" alt="" />
+      </div>
+      <div class="panel right-panel">
+        <div class="content">
+          <h3>Notip</h3>
+          <p>Notip là một ứng dụng nhắn tin trực tuyến</p>
+          <button signInBtn class="btn transparent btn-signup" id="sign-in-btn">
+            Đăng nhập
+          </button>
+        </div>
+        <img src="../../../assets/images/sign-up.svg" class="image" alt="" />
+      </div>
+    </div>
+  </div>
+</div>

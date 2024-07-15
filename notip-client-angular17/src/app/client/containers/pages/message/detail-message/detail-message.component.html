@@ -1,0 +1,575 @@
+<div style="height: 100%" [hidden]="group != null || contact != null">
+  <app-default
+    [title]="'Hãy bắt đầu những cuộc trò chuyện cùng người thân và bạn bè'"
+  ></app-default>
+</div>
+
+<div [hidden]="group == null">
+  <div class="main-box-chat">
+    <div class="box-chat">
+      <div class="box-chat-header">
+        <div class="box-avatar d-flex">
+          <ng-container *ngIf="group != null">
+            <ng-container>
+              <img [src]="group?.Avatar | pipeHostFile" alt="" />
+            </ng-container>
+            <div class="mx-2">
+              <div style="font-size: 1rem; font-weight: 600">
+                {{ group.Name }}
+              </div>
+              <ng-container *ngIf="group?.Type === 'multi'">
+                <div style="font-size: 0.8rem; color: #707070">
+                  {{ group.Users.length }} thành viên
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+        <div class="box-add-user-group d-flex align-items-center">
+          <span
+            class="icon-control d-flex justify-content-center align-items-center"
+            *ngIf="group?.Type === 'multi'"
+            (click)="showModalAddContact()"
+            title="Thêm liên hệ"
+          >
+            <span nz-icon nzType="user-add" nzTheme="outline"></span>
+          </span>
+          <span
+            class="icon-control d-flex justify-content-center align-items-center"
+            title="Gọi video"
+          >
+            <span nz-icon nzType="video-camera" nzTheme="outline"></span>
+          </span>
+          <span
+            class="icon-control d-flex justify-content-center align-items-center contact-control"
+            title="Thông tin hội thoại"
+          >
+            <ng-container *ngIf="menuFold; else elseTemplate">
+              <span
+                nz-icon
+                nzType="menu-unfold"
+                (click)="toggleMenuFold()"
+                nzTheme="outline"
+              ></span>
+            </ng-container>
+            <ng-template #elseTemplate>
+              <span
+                nz-icon
+                nzType="menu-fold"
+                (click)="toggleMenuFold()"
+                nzTheme="outline"
+              ></span>
+            </ng-template>
+          </span>
+        </div>
+      </div>
+      <!-- <nz-progress nzStrokeLinecap="round" nzType="line" [nzShowInfo]="false" [nzPercent]="percenLoadingGroup"></nz-progress> -->
+      <div #scroll class="box-chat-body">
+        <div *ngIf="currentUser != null" class="box-message">
+          <div *ngFor="let item of messages; index as index">
+            <div
+              *ngIf="currentUser.Id != item.CreatedBy"
+              class="box-message-send"
+            >
+              <div
+                class="box-message-img"
+                (click)="showContact(item.UserCreatedBy.Id)"
+              >
+                <img [src]="item.UserCreatedBy.Avatar | pipeHostFile" alt="" />
+              </div>
+              <div class="box-message-content">
+                <div class="box-message-content-message">
+                  <div class="box-message-content-message-content">
+                    <div class="box-message-content-message-sender-name">
+                      {{ item.UserCreatedBy.UserName }}
+                    </div>
+                    <ng-container *ngIf="item.Type == 'text'">
+                      <div [innerHTML]="item.Content"></div>
+                    </ng-container>
+                    <ng-container *ngIf="item.Type == 'attachment'">
+                      <i class="mdi mdi-file-document"></i>
+                      <div
+                        [innerHTML]="item.Content"
+                        style="display: inline-block"
+                      ></div>
+                    </ng-container>
+                    <ng-container *ngIf="item.Type == 'media'">
+                      <img
+                        nz-image
+                        class="img-message"
+                        [nzSrc]="item.Path | pipeHostFile"
+                        alt=""
+                      />
+                    </ng-container>
+                  </div>
+                  <div class="box-message-content-message-time">
+                    <span>{{ item.Created | chatDate }}</span>
+                  </div>
+                </div>
+                <div
+                  (click)="downloadFile(item.Path, item.Content)"
+                  *ngIf="item.Type != 'text'"
+                  class="box-message-download"
+                >
+                  <i class="mdi mdi-download"></i>
+                </div>
+              </div>
+            </div>
+            <div
+              *ngIf="currentUser.Id == item.CreatedBy"
+              class="box-message-received"
+            >
+              <div class="box-message-content">
+                <div
+                  (click)="downloadFile(item.Path, item.Content)"
+                  *ngIf="item.Type != 'text'"
+                  class="box-message-download"
+                >
+                  <i class="mdi mdi-download"></i>
+                </div>
+                <div class="box-message-content-message">
+                  <div class="box-message-content-message-content">
+                    <ng-container *ngIf="item.Type == 'text'">
+                      <div [innerHTML]="item.Content"></div>
+                    </ng-container>
+                    <ng-container *ngIf="item.Type == 'attachment'">
+                      <i class="mdi mdi-file-document"></i>
+                      <div
+                        [innerHTML]="item.Content"
+                        style="display: inline-block"
+                      ></div>
+                    </ng-container>
+                    <ng-container *ngIf="item.Type == 'media'">
+                      <ng-container *ngIf="item.IsNew">
+                        <img class="img-message" [src]="filePreview" alt="" />
+                      </ng-container>
+
+                      <ng-container *ngIf="!item.IsNew">
+                        <img
+                          nz-image
+                          class="img-message"
+                          [nzSrc]="item.Path | pipeHostFile"
+                          alt=""
+                        />
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                  <div class="box-message-content-message-time">
+                    <div *ngIf="item.IsNew">
+                      <div *ngIf="isSendingMessage">Đang gửi</div>
+                      <div *ngIf="hasBeenSentMessage">Đã gửi</div>
+                      <div *ngIf="hasErrorMessage" style="color: #ff201e">
+                        <span
+                          nz-icon
+                          nzType="exclamation-circle"
+                          nzTheme="outline"
+                        ></span
+                        >Có lỗi! Hãy gửi lại tin nhắn.
+                      </div>
+                    </div>
+                    <span *ngIf="!item.IsNew">{{
+                      item.Created | chatDate
+                    }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="box-message-img">
+                <img [src]="item.UserCreatedBy.Avatar | pipeHostFile" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box-chat-send">
+        <div class="box-chat-send-media">
+          <span class="mr-1">
+            <i
+              class="fa-solid fa-file"
+              onclick="$('#file_attach_upload').click()"
+            ></i>
+            <!-- <span nz-icon nzType="file-text" onclick="$('#file_attach_upload').click()" nzTheme="outline"></span> -->
+            <input
+              type="file"
+              (change)="sendFile($event)"
+              [hidden]="true"
+              id="file_attach_upload"
+              accept=".xlsx,.xls,.csv,.doc,.docx"
+            />
+          </span>
+          <span>
+            <i
+              class="fa-solid fa-image"
+              onclick="$('#image_attach_upload').click()"
+            ></i>
+            <input
+              type="file"
+              (change)="sendImage($event)"
+              [hidden]="true"
+              id="image_attach_upload"
+              accept=".gif,.jpg,.jpeg,.png"
+            />
+          </span>
+        </div>
+        <div class="box-chat-send-text">
+          <input
+            type="text"
+            id="my-text"
+            class="form-control"
+            rows="1"
+            [(ngModel)]="textMessage"
+            (keydown)="onKeydown($event)"
+            placeholder="Nhập nội dung tin nhắn"
+          />
+        </div>
+        <div (click)="sendMessage()" class="btn-send-message">
+          <span title="Gửi">
+            <span
+              nz-icon
+              nzType="send"
+              class="d-flex justify-content-center align-items-center"
+              nzTheme="outline"
+            ></span>
+          </span>
+        </div>
+      </div>
+
+      <button id="scroll-to-bottom" (click)="scrollToBottom()">
+        <span nz-icon nzType="arrow-down" nzTheme="outline"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<nz-drawer
+  [nzClosable]="false"
+  [nzVisible]="menuFold"
+  nzPlacement="right"
+  [nzTitle]="textTitleInfoChat"
+  (nzOnClose)="closeContactInfoModal()"
+>
+  <ng-container *nzDrawerContent>
+    <ng-container *ngIf="group?.Type === 'multi'">
+      <div class="box-contact-info-body">
+        <div class="box-group-info">
+          <img [src]="group?.Avatar | pipeHostFile" alt="" />
+          <i
+            onclick="$('#image_group_upload').click()"
+            class="mdi mdi-camera"
+          ></i>
+          <input
+            type="file"
+            [hidden]="true"
+            (change)="updateGroupAvatar($event)"
+            id="image_group_upload"
+            accept=".jpg,.jpeg,.png"
+          />
+        </div>
+        <div class="d-flex justify-content-center">
+          <div class="d-flex">
+            <div class="input-name-group">{{ group.Name }}</div>
+            <button
+              class="ms-2 edit-name-group d-flex justify-content-center align-items-center"
+              (click)="modalEditGroupName = true"
+            >
+              <i class="fa fa-solid fa-pencil"></i>
+            </button>
+          </div>
+        </div>
+        <div class="mt-1">
+          <u>Danh sách thành viên</u>
+        </div>
+        <div class="mt-2 list-member-in-group">
+          <ul class="list-unstyled">
+            <li *ngFor="let member of group?.Users" class="mt-2">
+              <div class="user-avatar">
+                <nz-avatar
+                  nzSize="large"
+                  nzIcon="user"
+                  class="me-2"
+                  [nzSrc]="member.Avatar | pipeHostFile"
+                ></nz-avatar>
+                <span>{{ member.UserName }}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <button
+          class="btn btn-warning"
+          nz-popconfirm
+          nzPopconfirmTitle="Bạn có chắc chắn muốn rời nhóm?"
+          nzPopconfirmPlacement="bottom"
+          (nzOnConfirm)="confirmLeave()"
+          (nzOnCancel)="cancelLeave()"
+        >
+          Rời nhóm
+        </button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="group?.Type === 'single'">
+      <div class="box-contact-info-body">
+        <div class="box-info-image">
+          <img [src]="group?.Avatar | pipeHostFile" alt="" />
+        </div>
+        <div>
+          <h6 style="display: block; margin: 0 auto">
+            {{ group?.UserName }}
+          </h6>
+        </div>
+        <div class="box-contact-info-user">
+          <i class="mdi mdi-gender-male-female"></i>
+          <span>{{ group?.Gender }}</span>
+        </div>
+        <div class="box-contact-info-user">
+          <i class="mdi mdi-cake"></i>
+          <span>{{ group?.Dob }}</span>
+        </div>
+        <div class="box-contact-info-user">
+          <i class="mdi mdi-cellphone"></i>
+          <span>{{ group?.Phone }}</span>
+        </div>
+        <div class="box-contact-info-user">
+          <i class="mdi mdi-email-outline"></i>
+          <span>{{ group?.Email }}</span>
+        </div>
+        <div class="box-contact-info-user">
+          <i class="mdi mdi-map-marker"></i>
+          <span>{{ group?.Address }}</span>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</nz-drawer>
+
+<nz-modal
+  [(nzVisible)]="modalAddContact"
+  nzTitle="Thêm liên hệ"
+  [nzContent]="modalContentAddContact"
+  [nzFooter]="modalFooterAddContact"
+  (nzOnCancel)="this.modalAddContact = false"
+>
+  <ng-template #modalContentAddContact>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="mb-3">
+          <input
+            autocomplete="false"
+            nz-input
+            type="text"
+            (input)="searchContact()"
+            [(ngModel)]="keySearch"
+            id="search-contact-add-group"
+            class="form-control"
+            placeholder="Tên liên hệ, sđt, email liên hệ"
+          />
+        </div>
+        <div
+          class="d-flex"
+          style="flex-wrap: wrap"
+          *ngIf="memberSelected != null"
+        >
+          <ng-container *ngFor="let member of memberSelected">
+            <div class="box-member-in-group">
+              <!-- <div *ngIf="member.fieldStamp1" class="box-member-in-group"> -->
+              <div style="font-size: 0.8rem">{{ member.UserName }}</div>
+              <span
+                (click)="removeMemberToGroup(member)"
+                class="remove-member btn btn-close"
+              ></span>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="list-contact-adding">
+          <ng-container *ngIf="loadingSearch">
+            <ul class="list-unstyled">
+              <li>
+                <div class="box-group-skeleton">
+                  <nz-skeleton
+                    [nzAvatar]="true"
+                    [nzActive]="true"
+                  ></nz-skeleton>
+                </div>
+              </li>
+              <li>
+                <div class="box-group-skeleton">
+                  <nz-skeleton
+                    [nzAvatar]="true"
+                    [nzActive]="true"
+                  ></nz-skeleton>
+                </div>
+              </li>
+              <li>
+                <div class="box-group-skeleton">
+                  <nz-skeleton
+                    [nzAvatar]="true"
+                    [nzActive]="true"
+                  ></nz-skeleton>
+                </div>
+              </li>
+            </ul>
+          </ng-container>
+          <ul class="list-unstyled">
+            <li *ngFor="let user of userSearch">
+              <!-- <div *ngIf="member.fieldStamp1" class="box-member-in-group"> -->
+              <div class="contacts">
+                <div class="contacts-avatar">
+                  <nz-avatar
+                    nzSize="large"
+                    nzIcon="user"
+                    [nzSrc]="user.Avatar | pipeHostFile"
+                  ></nz-avatar>
+                  <span class="ms-2">{{ user.UserName }}</span>
+                </div>
+                <div class="contacts-control">
+                  <div
+                    (click)="addUserToGroup(user)"
+                    class="contacts-control-sendmess"
+                  >
+                    <span nz-icon nzType="plus" nzTheme="outline"></span>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooterAddContact>
+    <button
+      nz-button
+      nzType="default"
+      class="btn me-2"
+      (click)="this.modalAddContact = false"
+    >
+      Huỷ
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      class="btn btn-primary"
+      (click)="submitAddContact()"
+    >
+      Xác nhận
+    </button>
+  </ng-template>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="modalEditGroupName"
+  nzTitle="Đổi tên nhóm"
+  [nzContent]="modalContentEditGroupName"
+  [nzFooter]="modalFooterEditGroupName"
+  (nzOnCancel)="modalEditGroupName = false"
+>
+  <ng-template #modalContentEditGroupName>
+    <div class="text-center">
+      <nz-avatar
+        [nzSize]="64"
+        [nzSrc]="group?.Avatar | pipeHostFile"
+        nzIcon="user"
+      ></nz-avatar>
+
+      <p>
+        Bạn có chắc chắn muốn đổi tên nhóm, khi xác nhận tên nhóm mới sẽ hiển
+        thị với tất cả các thành viên
+      </p>
+      <input
+        type="text"
+        nz-input
+        [(ngModel)]="group.Name"
+        class="input-name-group"
+      />
+    </div>
+  </ng-template>
+  <ng-template #modalFooterEditGroupName>
+    <button
+      nz-button
+      nzType="default"
+      class="btn"
+      (click)="modalEditGroupName = false"
+    >
+      Huỷ
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      class="btn btn-primary"
+      (click)="updateGroupName()"
+    >
+      Xác nhận
+    </button>
+  </ng-template>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="modalContact"
+  nzTitle="Thông tin liên hệ"
+  [nzContent]="modalContentContact"
+  [nzFooter]="modalFooterContact"
+  nzWidth="400px"
+  (nzOnCancel)="modalContact = false"
+>
+  <ng-template #modalContentContact>
+    <div class="box-main-contact-body">
+      <div class="container-avt-user">
+        <img class="avt-user" [src]="contact?.Avatar | pipeHostFile" alt="" />
+      </div>
+      <div class="mt-2 mb-2">
+        <h4 class="text-center name-user">
+          {{ contact?.UserName }}
+        </h4>
+      </div>
+      <div class="box-main-contact-control">
+        <div
+          class="option-contact-control call-contact"
+          (click)="sendFriendRequest(contact?.Id)"
+        >
+          <i class="fa-solid fa-user-plus" style="margin-right: 4px"></i>
+          <span>Kết bạn</span>
+        </div>
+        <div class="option-contact-control chat-contact" (click)="chat()">
+          <i class="fa fa-solid fa-message" style="margin-right: 4px"></i>
+          <span>Nhắn tin</span>
+        </div>
+      </div>
+      <div class="box-main-contact-body-detail">
+        <ng-container *ngIf="contact?.Gender">
+          <div class="row">
+            <div class="col-4">Giới tính:</div>
+            <div class="info col-8">{{ contact?.Gender }}</div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="contact?.Dob">
+          <div class="row">
+            <div class="col-4">Ngày sinh:</div>
+            <div class="info col-8">{{ contact?.Dob }}</div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="contact?.PhoneNumber">
+          <div class="row">
+            <div class="col-4">Số điện thoại:</div>
+            <div class="info col-8">{{ contact?.PhoneNumber | hidePhone }}</div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="contact?.Address">
+          <div class="row">
+            <div class="col-4">Địa chỉ:</div>
+            <div class="info col-8">{{ contact?.Address | hideAddress }}</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #modalFooterContact>
+    <div class="option-handle-friend block-user">
+      <span nz-icon nzType="stop" nzTheme="outline"></span> Chặn tin nhắn và
+      cuộc gọi
+    </div>
+    <div class="option-handle-friend report-user">
+      <span nz-icon nzType="warning" nzTheme="outline"></span> Báo xấu
+    </div>
+  </ng-template>
+</nz-modal>

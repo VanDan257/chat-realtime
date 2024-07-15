@@ -1,0 +1,11 @@
+.text-back{
+    font-size: 0.8rem;
+    color: #333;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.text-back:hover{
+    text-decoration: underline;
+    color: cadetblue;
+}

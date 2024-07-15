@@ -1,0 +1,41 @@
+<div class="box-left-content-title">
+  <strong class="size-13">Tất cả tin nhắn</strong>
+</div>
+<div class="box-left-content-body">
+
+  <ul class="list-unstyled">
+    @for (item of groups; track item) {
+    <li>
+      <div (click)="accessChatRoom(item)" class="box-group"  [ngClass]="{'active': groupSelected == item.Code}">
+        <div class="user-avatar">
+          <nz-avatar nzSize="large" nzIcon="user" [nzSrc]="item.Avatar | pipeHostFile"></nz-avatar>
+        </div>
+        <div class="box-group-detail">
+          <div class="box-group-title">
+            <div class="box-group-title-name">
+              <span> {{item.Name}} </span>
+            </div>
+            <div class="box-group-title-time">
+              <span>{{item.LastActive | chatDate}}</span>
+            </div>
+          </div>
+          <div class="box-group-last-message">
+              <ng-container *ngIf="item.LastMessage != null">
+                <ng-container
+                  *ngIf="item.LastMessage.Content.length > 30; else elseTemplate"
+                >
+                  <span> {{ item.LastMessage.Content.substring(0, 30) }}... </span>
+                </ng-container>
+                <ng-template #elseTemplate>
+                  <span>
+                    {{ item.LastMessage.Content }}
+                  </span>
+                </ng-template>
+              </ng-container>
+            </div>
+        </div>
+      </div>
+    </li>
+    }
+  </ul>
+</div>

@@ -1,0 +1,135 @@
+<div class="main-panel">
+    <div class="content-wrapper">
+      <div class="page-header">
+        <h3 class="page-title"><h4>Thông tin chi tiết phòng chat: {{infoChat?.Name}}</h4>  </h3>
+      </div>
+      <div class="danh-sach-thanh-vien">
+        <div class="page-header">
+          <div class="page-title"> # Danh sách thành viên </div>
+        </div>
+        <table class="table table-bordered table-striped table-hover">
+          <thead class="table-dark">
+          <tr>
+            <th></th>
+            <th>Họ và tên</th>
+            <th>Số điện thoại</th>
+            <th>Email</th>
+            <th>Giới tính</th>
+            <th>Lần đăng nhập cuối</th>
+            <!-- <th>Trạng thái</th> -->
+            <!-- <th>Ngày đăng kí</th> -->
+            <!-- <th></th> -->
+          </tr>
+          </thead>
+          @if(infoChat.Users.length > 0){
+
+              <tbody>
+                @for (user of infoChat.Users; track $index) {
+
+                    <tr>
+                      <td><img src="{{ user.Avatar | pipeHostFile }}" alt="" /></td>
+                      <td>{{user.UserName}}</td>
+                      <td>{{user.PhoneNumber}}</td>
+                      <td>{{user.Email}}</td>
+                      <td>{{user.Gender}}</td>
+                      <td>{{user.LastLogin}}</td>
+                      <!-- <td>
+                        <ng-container *ngIf="user.status === 1">
+                          <label class="badge badge-success">Hoạt động</label>
+                        </ng-container>
+                        <ng-container *ngIf="user.status === 0">
+                          <label class="badge badge-warning">Đã khóa</label>
+                        </ng-container>
+                      </td> -->
+                      <!-- <td>{{user.createdAt | chatDate}}</td> -->
+                      <!-- <td>
+                        <button title="Xóa khỏi phòng chat" (click)="onDeleteMember(user)" class="link-danger btn-option"><i class="fa fa-solid fa-trash"></i></button>
+                      </td> -->
+                    </tr>
+                }
+              </tbody>
+          }
+        </table>
+        <!-- <div class="d-flex mt-4 flex-wrap">
+          <p class="text-muted">Showing {{1+pageSizeMembers*(pageNumberMembers-1)}} to
+            <ng-container *ngIf="(10+pageSizeMembers*(pageNumberMembers-1)) >= infoChat.users.length">
+              {{infoChat.users.length}}
+            </ng-container>
+            <ng-container *ngIf="(10+pageSizeMembers*(pageNumberMembers-1)) < infoChat.users.length">
+              {{10+pageSizeMembers*(pageNumberMembers-1)}}
+            </ng-container>
+            of {{infoChat.users.length}} entries</p>
+          <nav class="ml-auto">
+            <pagination-controls (pageChange)="pageNumberMembers = $event"></pagination-controls>
+          </nav>
+        </div>
+      </div> -->
+  
+      <div class="danh-sach-tin-nhan">
+        <div class="page-header">
+          <div class="page-title"> # Danh sách tin nhắn </div>
+        </div>
+        <table class="table table-bordered table-striped w-100">
+          <tr>
+            <th>Nội dung</th>
+            <th>Kiểu tin nhắn</th>
+            <th>File đính kèm</th>
+            <th>Người gửi</th>
+            <th>Thời gian nhắn</th>
+            <th></th>
+          </tr>
+          <thead>
+          </thead>
+          @if(infoChat.Messages.length > 0){
+
+              <tbody>
+                @for (message of infoChat.Messages; track $index) {
+
+                    <tr>
+                      <td>{{message.Content}}</td>
+                      <td>{{message.Type}}</td>
+                      <td>{{message.Path}}</td>
+                      <td>{{message.CreateBy}}</td>
+                      <td>{{message.Created | pipeHostFile}}</td>
+                      <td>
+                        <button title="Xóa tin nhắn" class="link-danger btn-option"><i class="fa fa-solid fa-trash"></i></button>
+                      </td>
+                    </tr>
+                }
+              </tbody>
+          }
+        </table>
+        <!-- <div class="d-flex mt-4 flex-wrap">
+          <p class="text-muted">Showing {{1+pageSizeMessages*(pageNumberMessages-1)}} to
+            <ng-container *ngIf="(10+pageSizeMessages*(pageNumberMessages-1)) >= infoChat.messages.length">
+              {{infoChat.messages.length}}
+            </ng-container>
+            <ng-container *ngIf="(10+pageSizeMessages*(pageNumberMessages-1)) < infoChat.messages.length">
+              {{10+pageSizeMessages*(pageNumberMessages-1)}}
+            </ng-container>
+            of {{infoChat.messages.length}} entries</p>
+          <nav class="ml-auto">
+            <pagination-controls (pageChange)="pageNumberMessages = $event"></pagination-controls>
+          </nav>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- <div class="modal fade" id="modalDeleteMember">
+    <div class="modal-dialog">
+      <div *ngIf="memberDelete != null || memberDelete != undefined" class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex">
+            Bạn có muốn xóa người dùng: <div style="font-weight: 600;"> {{memberDelete.name}}</div>
+            khỏi phòng chat
+          </div>
+        </div>
+        <div class="d-flex p-3 justify-content-around">
+          <button class="btn btn-primary" (click)="deleteMember(memberDelete.id)">Xác nhận</button>
+          <button class="btn btn-dark" data-dismiss="modal">Hủy</button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  

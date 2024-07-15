@@ -1,0 +1,43 @@
+<div class="box-left-content-title">
+  <strong class="size-13">Danh sách liên hệ</strong>
+</div>
+<div class="box-left-content-body">
+  <ng-container *ngIf="loadingSearch">    
+    <ul class="list-unstyled">
+      <li>
+        <div class="box-group-skeleton">
+          <nz-skeleton [nzAvatar]="true" [nzActive]="true"></nz-skeleton>
+        </div>
+      </li>
+      <li>
+        <div class="box-group-skeleton">
+          <nz-skeleton [nzAvatar]="true" [nzActive]="true"></nz-skeleton>
+        </div>
+      </li>
+      <li>
+        <div class="box-group-skeleton">
+          <nz-skeleton [nzAvatar]="true" [nzActive]="true"></nz-skeleton>
+        </div>
+      </li>
+    </ul>
+  </ng-container>
+  
+  <ul class="list-unstyled">
+    <li *ngFor="let item of datas; index as index">
+      <div (click)="accessChatRoom(item)" class="box-group" [ngClass]="{'active': groupSelected == item.Code}">
+        <div class="user-avatar">
+          <img src="{{ item.Avatar | pipeHostFile }}" alt="" />
+        </div>
+        <div class="box-group-detail justify-content-center">
+          <div class="box-group-title">
+            <div class="box-group-title-name">
+              <span>
+                {{ item.Name }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>  
+</div>

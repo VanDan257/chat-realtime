@@ -1,0 +1,37 @@
+.box-left-content-body {
+    height: calc(100% - 167px);
+    overflow: auto;
+}
+
+.box-group {
+    display: flex;
+    padding: 10px 5px 10px 15px;
+    cursor: pointer;
+}
+
+.box-group:hover {
+    background: #e5f8ff;
+}
+
+.box-group.active {
+    background: #e5f8ff;
+}
+
+.box-contact-detail{
+  margin-left: 12px;
+  font-size: 13px;
+}
+
+.box-contact-detail-name {
+    color: #0b2b4e;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.list-unstyled .box-group{
+    padding: 16px 10px;
+}
+
+.active{
+    background-color: #e5f8ff;
+}

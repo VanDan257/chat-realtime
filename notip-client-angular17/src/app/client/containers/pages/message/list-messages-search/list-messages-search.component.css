@@ -1,0 +1,69 @@
+.box-left-content-title {
+    padding: 8px 10px 8px 15px;
+  }
+  
+  .box-left-content-body {
+    height: calc(100% - 167px);
+    overflow: auto;
+  }
+  
+  .box-group {
+    display: flex;
+    padding: 10px 5px 10px 15px;
+    cursor: pointer;
+  }
+  
+  .box-group:hover {
+    background: #e5f8ff;
+  }
+  
+  .box-group.active {
+    background: #e5f8ff;
+  }
+  
+  .box-group-detail {
+    margin-left: 12px;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .box-group-title {
+    display: flex;
+    font-size: 13px;
+    justify-content: space-between;
+  }
+  
+  .box-group-title-name {
+    color: #0b2b4e;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  
+  .box-group-title-time {
+    font-size: 13px;
+    color: #8e8e8e;
+  }
+  
+  .box-group-last-message span {
+    font-size: 13px;
+    color: #8e8e8e;
+  }
+  .user-avatar img {
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    border: 1px solid #dcdcdc !important;
+    padding: 2px !important;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+.box-group-skeleton{
+  display: flex;
+    padding: 10px 5px 10px 15px;
+    cursor: pointer;
+    overflow: hidden;
+    height: 60px;
+}

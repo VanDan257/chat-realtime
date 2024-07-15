@@ -1,0 +1,258 @@
+<div class="main-box-contact">
+  <div class="box-right-content-header-default">
+    <b>{{ title }}</b>
+  </div>
+  <div class="main-box-contact">
+    @if(contact === 1){
+
+      <div class="friend-invite-count">Lời mời ({{ contacts.length }})</div>
+      <div class="container-contact">
+        <div class="search-contact">
+          <div class="d-flex align-items-center">
+            <input
+              type="text"
+              nz-input
+              placeholder="Tìm kiếm liên hệ"
+              [(ngModel)]="keySearchContact"
+              (input)="searchContact(0)"
+              id="input-search-contact"
+              autocomplete="false"
+              class="search-contact-input-invite-friend"
+            />
+            <select
+              class="range-by-name"
+              id="range-by-name-list-friend-invitation"
+            >
+              <option value="A-Z" name="a-z">Tên A-Z</option>
+              <option value="Z-A" name="z-a">Tên Z-A</option>
+            </select>
+          </div>
+          <div class="d-flex align-items-center">
+            <button nz-button nzType="default" (click)="searchContact(1)">
+              <span nz-icon nzType="double-left" nzTheme="outline"></span>
+            </button>
+            <button
+              nz-button
+              nzType="default"
+              (click)="searchContact(pageIndex - 1)"
+            >
+              <span nz-icon nzType="left" nzTheme="outline"></span>
+            </button>
+            @for (index of totalPage; track $index) {
+                <button nz-button nzType="default" (click)="searchContact(index)">
+                  {{ index }}
+                </button>
+              }
+              <button
+                nz-button
+                nzType="default"
+                (click)="searchContact(pageIndex + 1)"
+              >
+                <span nz-icon nzType="right" nzTheme="outline"></span>
+              </button>
+              <button
+                nz-button
+                nzType="default"
+                (click)="searchContact(totalPage[totalPage.length - 1])"
+              >
+              <span nz-icon nzType="double-right" nzTheme="outline"></span>
+            </button>
+          </div>
+        </div>
+        <div class="list-contact-card">
+          <ng-container *ngFor="let item of contacts">
+            <div
+              class="card"
+              style="width: 14rem; margin-bottom: 10px; margin-left: 10px"
+            >
+              <img
+                [src]="item.Avatar | pipeHostFile"
+                class="card-img-top avatar-user"
+                alt="..."
+              />
+              <div class="card-body">
+                <h5 class="card-title">{{ item.UserName }}</h5>
+                <p class="card-text"></p>
+                @if(item.IsSentFriend){
+                <div class="list-btn-option d-flex justify-content-between">
+                  <button
+                    class="btn btn-primary btn-control-1"
+                    (click)="cancelInviteFriend(item.Id)"
+                  >
+                    Hủy lời mời
+                  </button>
+                  <button class="btn btn-secondary">Nhắn tin</button>
+                </div>
+                } @else if (item.IsBeenSentFriend) {
+                <div class="list-btn-option d-flex justify-content-between">
+                  <button
+                    class="btn btn-primary btn-control-1"
+                    (click)="acceptInviteFriend(item.Id)"
+                  >
+                    Chấp nhận
+                  </button>
+                  <button class="btn btn-secondary">Xoá</button>
+                </div>
+                } @else if (item.IsBlocked) {
+                <div class="list-btn-option d-flex justify-content-between">
+                  <button
+                    class="btn btn-warning btn-control-1"
+                    (click)="unblockFriend(item.Id)"
+                  >
+                    Bỏ chặn
+                  </button>
+                </div>
+                } @else if (item.IsFriend) {
+                <div class="list-btn-option d-flex justify-content-between">
+                  <button
+                    class="btn btn-primary btn-control-1"
+                    (click)="removeFriend(item.Id)"
+                  >
+                    Huỷ kết bạn
+                  </button>
+                  <button class="btn btn-secondary ms-3">Nhắn tin</button>
+                </div>
+                } @else {
+                <div class="list-btn-option d-flex justify-content-between">
+                  <button
+                    class="btn btn-primary btn-control-1"
+                    (click)="sendInviteFriend(item.Id)"
+                  >
+                    Kết bạn
+                  </button>
+                  <button class="btn btn-secondary ms-3">Nhắn tin</button>
+                </div>
+                }
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    }
+    @if(contact == 2){
+      <div class="friend-invite-count">Bạn bè ({{ contacts.length }})</div>
+      <div class="container-contact">
+        <div class="search-contact">
+          <div class="d-flex align-items-center">
+            <input
+              type="text"
+              nz-input
+              placeholder="Tìm kiếm bạn bè"
+              [(ngModel)]="keySearchContactFriend"
+              (input)="searchFriendContact(0)"
+              id="input-search-contact-friend"
+              autocomplete="false"
+              class="search-contact-input-invite-friend"
+            />
+            <select
+              class="range-by-name"
+              id="range-by-name-list-friend-invitation"
+            >
+              <option value="A-Z" name="a-z">Tên A-Z</option>
+              <option value="Z-A" name="z-a">Tên Z-A</option>
+            </select>
+          </div>
+          <div class="d-flex align-items-center">
+            <button nz-button nzType="default" (click)="searchFriendContact(1)">
+              <span nz-icon nzType="double-left" nzTheme="outline"></span>
+            </button>
+            <button
+              nz-button
+              nzType="default"
+              (click)="searchFriendContact(pageIndex - 1)"
+            >
+              <span nz-icon nzType="left" nzTheme="outline"></span>
+            </button>
+            @for (index of totalPage; track $index) {
+            <button nz-button nzType="default" (click)="searchFriendContact(index)">
+              {{ index }}
+            </button>
+            }
+            <button
+              nz-button
+              nzType="default"
+              (click)="searchFriendContact(pageIndex + 1)"
+            >
+              <span nz-icon nzType="right" nzTheme="outline"></span>
+            </button>
+            <button
+              nz-button
+              nzType="default"
+              (click)="searchContact(totalPage[totalPage.length - 1])"
+            >
+              <span nz-icon nzType="double-right" nzTheme="outline"></span>
+            </button>
+          </div>
+        </div>
+        <div class="list-contact-card">
+          <ng-container *ngFor="let item of contacts">
+            <div
+              class="card"
+              style="width: 14rem; margin-bottom: 10px; margin-left: 10px"
+            >
+              <img
+                [src]="item.Avatar | pipeHostFile"
+                class="card-img-top avatar-user"
+                alt="..."
+              />
+              <div class="card-body">
+                <h5 class="card-title">{{ item.UserName }}</h5>
+                <p class="card-text"></p>
+                @if(item.IsSentFriend){
+                <div class="list-btn-option d-flex justify-content-between">
+                  <button
+                    class="btn btn-primary btn-control-1"
+                    (click)="cancelInviteFriend(item.Id)"
+                  >
+                    Hủy lời mời
+                  </button>
+                  <button class="btn btn-secondary">Nhắn tin</button>
+                </div>
+                } @else if (item.IsBeenSentFriend) {
+                <div class="list-btn-option d-flex justify-content-between">
+                  <button
+                    class="btn btn-primary btn-control-1"
+                    (click)="acceptInviteFriend(item.Id)"
+                  >
+                    Chấp nhận
+                  </button>
+                  <button class="btn btn-secondary">Xoá</button>
+                </div>
+                } @else if (item.IsBlocked) {
+                <div class="list-btn-option d-flex justify-content-between">
+                  <button
+                    class="btn btn-warning btn-control-1"
+                    (click)="unblockFriend(item.Id)"
+                  >
+                    Bỏ chặn
+                  </button>
+                </div>
+                } @else if (item.IsFriend) {
+                <div class="list-btn-option d-flex justify-content-between">
+                  <button
+                    class="btn btn-primary btn-control-1"
+                    (click)="removeFriend(item.Id)"
+                  >
+                    Huỷ kết bạn
+                  </button>
+                  <button class="btn btn-secondary ms-3">Nhắn tin</button>
+                </div>
+                } @else {
+                <div class="list-btn-option d-flex justify-content-between">
+                  <button
+                    class="btn btn-primary btn-control-1"
+                    (click)="sendInviteFriend(item.Id)"
+                  >
+                    Kết bạn
+                  </button>
+                  <button class="btn btn-secondary ms-3">Nhắn tin</button>
+                </div>
+                }
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    }
+  </div>
+</div>

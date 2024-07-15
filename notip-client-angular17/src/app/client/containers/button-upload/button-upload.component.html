@@ -1,0 +1,8 @@
+<img class="profile-img" [src]="srcDefault | pipeHostFile" alt="Img">
+<div class="text-center pt-2">
+    <button (click)="chooseFile()" type="button" class="btn btn-success btn-sm margin-top-md">
+        Chọn ảnh
+    </button>
+    <input [hidden]="true" #inpFile type="file" (change)="onFileChange($event)"
+        accept=".jpg, .png, .jpeg, .gif, .bmp|image/*" />
+</div>

@@ -1,0 +1,51 @@
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+      <li class="nav-item nav-profile">
+        <a href="#" class="nav-link">
+          <div class="profile-image">
+            <img
+              class="img-xs rounded-circle"
+              src="/assets/admin/images/faces/face8.jpg"
+              alt="profile image"
+            />
+            <div class="dot-indicator bg-success"></div>
+          </div>
+          <div class="text-wrapper">
+            <p class="profile-name">Văn Dân</p>
+            <p class="designation">Administrator</p>
+          </div>
+          <div class="icon-container">
+            <i class="icon-bubbles"></i>
+            <div class="dot-indicator bg-danger"></div>
+          </div>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['trang-chu']">
+          <span class="menu-title">Dashboard</span>
+          <i class="icon-screen-desktop menu-icon"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          [routerLink]="['phong-chat/quan-ly-phong-chat']">
+          <span class="menu-title">Quản lý phòng chat</span>
+          <i class="icon-layers menu-icon"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['khach-hang/quan-ly-khach-hang']">
+          <span class="menu-title">Quản lý khách hàng</span>
+          <i class="icon-globe menu-icon"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['nhan-vien/quan-ly-nhan-vien']">
+          <span class="menu-title">Quản lý nhân viên</span>
+          <i class="icon-book-open menu-icon"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  

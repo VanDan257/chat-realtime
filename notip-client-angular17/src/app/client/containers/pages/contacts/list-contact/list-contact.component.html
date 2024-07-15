@@ -1,0 +1,33 @@
+<div class="box-left-content-body">
+    <ul class="list-unstyled">
+  
+      <li [ngClass]="{'active': itemIndexSelected == 1}">
+        <div class="box-group" (click)="openContact(1)">
+          <div class="box-contact-detail">
+            <div class="box-contact-detail-name">
+              Lời mời kết bạn
+            </div>
+          </div>
+        </div>
+      </li>
+      <li [ngClass]="{'active': itemIndexSelected == 2}">
+        <div class="box-group " (click)="openContact(2)">
+          <div class="box-contact-detail">
+            <div class="box-contact-detail-name">
+              Danh sách bạn bè
+            </div>
+          </div>
+        </div>
+      </li>
+      <li [ngClass]="{'active': itemIndexSelected == 3}">
+        <div class="box-group " (click)="openContact(3)">
+          <div class="box-contact-detail">
+            <div class="box-contact-detail-name">
+              Liên hệ đã chặn
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  

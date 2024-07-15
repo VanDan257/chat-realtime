@@ -1,0 +1,65 @@
+<div class="main-panel">
+    <div class="content-wrapper">
+      <div class="page-header">
+        <h3 class="page-title"> Danh sách phòng chat </h3>
+        <!-- <nav aria-label="breadcrumb">
+          <button class="btn btn-info btn-rounded">Tạo phòng chát</button>
+        </nav> -->
+      </div>
+      <table class="table table-bordered table-striped table-hover">
+          <thead class="table-dark">
+              <tr>
+                  <th></th>
+                  <th>Tên phòng chat</th>
+                  <th>Loại phòng chat</th>
+                  <th>Số lượng tin đã nhắn</th>
+                  <th>Số lượng thành viên</th>
+                  <th>Ngày tạo</th>
+                  <th>Lần hoạt động cuối</th>
+                  <th></th>
+              </tr>
+          </thead>
+          <tbody>
+            @if(chatRooms.length > 0){
+                @for(chat of chatRooms; track $index){
+                    <tr>
+                        <td [routerLink]="['/admin/phong-chat/chi-tiet-phong-chat', chat.Code]"><img src="{{ chat.Avatar| pipeHostFile }}" alt="" /></td>
+                        <td><a [routerLink]="['/admin/phong-chat/chi-tiet-phong-chat', chat.Code]" class="link-primary">{{chat.Name}}</a></td>
+                        <td>
+                            @if(chat.Type == "single"){
+                                Riêng tư
+                            }
+                            @else if(chat.Type == "multi"){
+                                Nhóm chat
+                            }
+                        </td>
+                        <td>{{chat.NumberOfMessage}}</td>
+                        <td>{{chat.NumberOfMember}}</td>
+                        <td>{{chat.Created | date:'short'}}</td>
+                        <td>{{chat.LastActive| date:'short'}}</td>
+                        <td>
+                            <button title="Xem chi tiết" class="link-info btn-option"><i class="fa fa-solid fa-eye"></i></button> |
+                            <button title="Xóa" class="link-danger btn-option"><i class="fa fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                }
+            }
+          </tbody>
+      </table>
+      <!-- <div class="d-flex mt-4 flex-wrap">
+        <p class="text-muted">Showing {{1+pageSize*(pageNumber-1)}} to
+          <ng-container *ngIf="(10+pageSize*(pageNumber-1)) >= chats.length">
+            {{chats.length}}
+          </ng-container>
+          <ng-container *ngIf="(10+pageSize*(pageNumber-1)) < chats.length">
+            {{10+pageSize*(pageNumber-1)}}
+          </ng-container>
+          of {{chats.length}} entries</p>
+        <nav class="ml-auto">
+          <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+        </nav>
+      </div> -->
+    </div>
+  </div>
+  
+  

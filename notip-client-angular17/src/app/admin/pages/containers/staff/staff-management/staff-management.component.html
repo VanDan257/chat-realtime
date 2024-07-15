@@ -1,0 +1,200 @@
+<div class="main-panel">
+    <div class="content-wrapper">
+      <div class="page-header">
+        <h3 class="page-title"> Danh sách nhân viên </h3>
+        <nav aria-label="breadcrumb">
+            <button class="btn-primary" nz-button nzType="primary" (click)="showModal()">
+                <span>Thêm nhân viên</span>
+              </button>
+        </nav>
+      </div>
+      <table class="table table-bordered table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th></th>
+                <th style="width: 20%">Họ và tên</th>
+                <th style="width: 10%">Số điện thoại</th>
+                <th style="width: 10%">Email</th>
+                <th style="width: 10%">Giới tính</th>
+                <th style="width: 15%">Lần đăng nhập cuối</th>
+                <th style="width: 15%">Ngày đăng kí</th>
+                <th></th>
+              </tr>
+        </thead>
+        <tbody>
+            @for(staff of staffs; track $index){
+                <tr>
+                  <td><img src="{{ staff.Avatar | pipeHostFile }}" alt="" /></td>
+                  <td>{{staff.UserName}}</td>
+                  <td>{{staff.PhoneNumber}}</td>
+                  <td>{{staff.Email}}</td>
+                  <td>{{staff.LastLogin}}</td>
+                  <td>{{staff.Created | date:'short'}}</td>
+                  <td>
+                    <button title="Xem chi tiết" class="btn-option link-info"><i class="fa fa-solid fa-eye"></i></button>
+                  </td>
+                </tr>
+            }
+        </tbody>
+      </table>
+      <div class="d-flex align-items-center">
+        <button class="btn" nz-button nzType="default" (click)="getStaff(1)">
+          <span nz-icon nzType="double-left" nzTheme="outline"></span>
+        </button>
+        <button
+          nz-button
+          nzType="default"
+          (click)="getStaff(pageIndex - 1)"
+        >
+          <span nz-icon nzType="left" nzTheme="outline"></span>
+        </button>
+        @for (index of totalPage; track $index) {
+            <button nz-button nzType="default" (click)="getStaff(index)">
+              {{ index }}
+            </button>
+          }
+          <button
+            nz-button
+            nzType="default"
+            (click)="getStaff(pageIndex + 1)"
+          >
+            <span nz-icon nzType="right" nzTheme="outline"></span>
+          </button>
+          <button
+            nz-button
+            nzType="default"
+            (click)="getStaff(totalPage[totalPage.length - 1])"
+          >
+          <span nz-icon nzType="double-right" nzTheme="outline"></span>
+        </button>
+      </div>
+    </div>
+</div>
+
+<nz-modal
+    [(nzVisible)]="isVisible"
+    [nzTitle]="modalTitle"
+    [nzContent]="modalContent"
+    [nzFooter]="modalFooter"
+    nzWidth="750px"
+    (nzOnCancel)="handleCancel()"
+>
+<ng-template #modalTitle>Thêm mới nhân viên</ng-template>
+
+<ng-template #modalContent>
+    <form class="row" [formGroup]="createStaffForm" (ngSubmit)="createStaff()">
+          <div class="form-group col-6">
+            <label for="exampleInputName1">Họ và tên</label>
+            <input
+                type="text"
+                class="form-control"
+                id="exampleInputName1"
+                formControlName="UserName"
+                [formControl]="$any(createStaffForm.controls['UserName'])"
+                placeholder="Nhập họ và tên">
+            @if($any(createStaffForm.controls['UserName']).errors?.['required']){
+                <div class="invalid-feedback">
+                    Hãy nhập họ và tên nhân viên
+                </div>
+            }
+          </div>
+          <div class="form-group col-6">
+            <label for="exampleInputEmail3">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="exampleInputEmail3"
+              formControlName="Email"
+              [formControl]="$any(createStaffForm.controls['Email'])"
+              placeholder="Nhập địa chỉ email">
+            @if($any(createStaffForm.controls['Email']).errors?.['required']){
+                <div class="invalid-feedback">
+                    Hãy nhập email nhân viên
+                </div>
+            }
+            @if($any(createStaffForm.controls['Email']).errors?.['required']){
+
+                <div class="invalid-feedback">
+                    Hãy nhập đúng định dạng email
+                </div>
+            }
+          </div>
+          <div class="form-group col-6">
+            <label for="exampleInputPhone">Phone</label>
+            <input
+                ype="email"
+                class="form-control"
+                id="exampleInputPhone"
+                formControlName="PhoneNumber"
+                [formControl]="$any(createStaffForm.controls['PhoneNumber'])"
+                placeholder="Nhập số điện thoại">
+            @if($any(createStaffForm.controls['PhoneNumber']).errors?.['required']){
+                <div class="invalid-feedback">
+                    Hãy nhập số điện thoại nhân viên
+                </div>
+            }
+          </div>
+          <div class="form-group col-6">
+            <label for="exampleInputPassword4">Mật khẩu</label>
+            <input
+              type="text"
+              class="form-control"
+              id="exampleInputPassword4"
+              formControlName="Password"
+              [formControl]="$any(createStaffForm.controls['Password'])"
+              placeholder="Nhập mật khẩu">
+              @if($any(createStaffForm.controls['Password']).errors?.['required']){
+                <div class="invalid-feedback">
+                    Hãy nhập mật khẩu
+                </div>
+              }
+        </div>
+        <div class="form-group col-6">
+            <label for="exampleSelectGender">Giới tính</label>
+            <select class="form-control" formControlName="Gender" [formControl]="$any(createStaffForm.controls['Gender'])" id="exampleSelectGender">
+              <option selected>Nam</option>
+              <option>Nữ</option>
+            </select>
+        </div>
+        <div class="form-group col-6">
+            <label for="exampleSelectRole">Quyền</label>
+            <select class="form-control" formControlName="Role" [formControl]="$any(createStaffForm.controls['Role'])" id="exampleSelectRole">
+                <option value="ADMIN" selected>Nhân viên</option>
+                <option value="MODERATOR">Người quản trị</option>
+            </select>
+        </div>
+        <div class="form-group col-6">
+            <label for="exampleSelectGender">Ngày sinh</label>
+            <nz-date-picker
+             class="form-control form-control-sm"
+             formControlName="Dob"
+             [formControl]="$any(createStaffForm.controls['Dob'])" 
+             [nzFormat]="dateFormat"
+             ></nz-date-picker>
+        </div>
+        <div class="form-group col-6">
+            <label for="exampleInputCity1">Địa chỉ</label>
+            <input
+                type="text"
+                class="form-control"
+                id="exampleInputCity1"
+                formControlName="Address"
+                [formControl]="$any(createStaffForm.controls['Address'])"
+                placeholder="Nhập địa chỉ">
+        </div>
+        
+        <div class="form-group">
+            <label>Ảnh đại diện</label>
+            <input type="file" name="img[]" (change)="uploadFile($event)" class="form-control" placeholder="Chọn ảnh">
+        </div>
+        
+        <button type="submit" class="btn btn-primary mr-2 col-3" [disabled]="!createStaffForm.valid">Thêm mới</button>
+        <button class="btn btn-light col-3">Hủy</button>
+    </form>
+</ng-template>
+
+<ng-template #modalFooter>
+  <!-- <button nz-button nzType="default" (click)="handleCancel()">Hủy</button>
+  <button nz-button nzType="primary" class="btn btn-primary mr-2" [disabled]="!createStaffForm.valid" (click)="handleOk()" >Xác nhận</button> -->
+</ng-template>
+</nz-modal>

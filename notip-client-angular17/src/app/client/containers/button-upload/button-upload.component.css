@@ -1,0 +1,5 @@
+.profile-img{
+    width: 100%;
+    max-height: 265px;
+    object-fit: cover;
+}
